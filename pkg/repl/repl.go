@@ -29,6 +29,11 @@ func help_cmd() error {
 	return nil
 }
 
+func calc_help_cmd() error {
+	fmt.Println("After usage of calculate command:\n\nYou have to input the color space you want to convert to other color spaces, here is the list of them:\nRGB / CMYK / HSV / HSL / CIELAB(LAB) / HEX\nAlongside them, you have to input field values (1 for each field, matches abbv except for hex)\nExample with RGB:\nRGB 10 20 30; Where 10 - Red, 20 - Green, 30 - Blue (following the order in naming)\nFor hex, however, you just have to input hex color number: Hex #102030\n\nLimits for fields (inclusive):\nRGB - [0, 255] all\nCMYK: [0.0, 100.0] all\nHSV: [0.0, 360.0] for Hue, [0.0, 100.0] rest\nHSL: [0.0, 360.0] for Hue, [0.0, 100.0] rest\nCIELAB(LAB): [0.0, 100.0] for L, [-150.0, 150.0] rest\nHex: all 6 chars should be either numerical (0-9) or belong to A-F range")
+	return nil
+}
+
 func exit_cmd() error {
 	fmt.Println("Closing the color calculator...")
 	os.Exit(0)
@@ -313,6 +318,11 @@ func Get_cmds() map[string]cli_command {
 			name: "help",
 			description: "Display a help message",
 			Callback: help_cmd,
+		},
+		"calc_help":{
+			name: "calc_help",
+			description: "Displays calculator help message, which includes usage examples for calculate command",
+			Callback: calc_help_cmd,
 		},
 		"exit":{
 			name: "exit",
