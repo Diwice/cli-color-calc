@@ -9,12 +9,11 @@ A cli calculator for different color spaces (including sRGB, CMYK, HSL, HSV and 
 ## Installation
 
 To set up and run this project, follow these steps:
-
 1. Clone the repository:
 ```bash
 git clone https://github.com/Diwice/cli-color-calc
 ```
-2.Navigate to the project directory:
+2. Navigate to the project directory:
 ```bash
 cd cli-color-calc
 ```
