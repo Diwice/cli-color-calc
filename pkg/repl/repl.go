@@ -234,10 +234,22 @@ func calc_cmd() error {
 				break
 			}
 
-			fmt.Println(input[1])
+			c_rgb, err := colorspace.Hex_to_rgb(input[1])
+			if err != nil {
+				return err
+			}
+
+			c_cmyk := c_rgb.To_cmyk()
+			c_hsv := c_rgb.To_hsv()
+			c_hsl := c_rgb.To_hsl()
+			c_lab := c_rgb.To_cielab()
+
+			fmt.Printf("In RGB: Red - %d / Green - %d / Blue - %d\nIn CMYK: Cyan - %.2f / Magenta - %.2f / Yellow - %.2f / Key - %.2f\nIn HSV: Hue - %.2f / Saturation - %.2f / Value - %.2f\nIn HSL: Hue - %.2f / Saturation - %.2f / Lightness - %.2f \nIn CIELAB: L - %.2f / a - %.2f / b - %.2f\n", c_rgb.RED, c_rgb.GREEN, c_rgb.BLUE, c_cmyk.CYAN, c_cmyk.MAGENTA, c_cmyk.YELLOW, c_cmyk.KEY, c_hsv.HUE, c_hsv.SATURATION, c_hsv.VALUE, c_hsl.HUE, c_hsl.SATURATION, c_hsl.LIGHTNESS, c_lab.L, c_lab.A, c_lab.B)
 		default :
 			fmt.Println("Invalid input. Expecting : RGB/CMYK/HSV/HSL/CIELAB(LAB)/HEX and corresponding fields. Example: RGB 10 20 30")
 	}
+
+
 
 	return nil
 }
