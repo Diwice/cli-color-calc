@@ -81,7 +81,15 @@ func calc_cmd() error {
 				break
 			}
 
-			fmt.Println(colorspace.RGB_obj{RED: uint8(r), GREEN: uint8(g), BLUE: uint8(b)})
+			rgb := colorspace.RGB_obj{RED: uint8(r), GREEN: uint8(g), BLUE: uint8(b)}
+
+			c_cmyk := rgb.To_cmyk()
+			c_hsv := rgb.To_hsv()
+			c_hsl := rgb.To_hsl()
+			c_lab := rgb.To_cielab()
+			c_hex := rgb.To_hex()
+
+			fmt.Printf("In CMYK: Cyan - %.2f / Magenta - %.2f / Yellow - %.2f / Key - %.2f\nIn HSV: Hue - %.2f / Saturation - %.2f / Value - %.2f\nIn HSL: Hue - %.2f / Saturation - %.2f / Lightness - %.2f\nIn CIELAB: L - %.2f / a - %.2f / b - %.2f\nIn Hex: %s\n", c_cmyk.CYAN, c_cmyk.MAGENTA, c_cmyk.YELLOW, c_cmyk.KEY, c_hsv.HUE, c_hsv.SATURATION, c_hsv.VALUE, c_hsl.HUE, c_hsl.SATURATION, c_hsl.LIGHTNESS, c_lab.L, c_lab.A, c_lab.B, c_hex)
 		case "cmyk" :
 			if len(input) != 5 {
 				fmt.Println("Invalid input, expecting 4 corresponding fields for CMYK: Cyan, Magenta, Yellow and Key (Black)")
@@ -122,7 +130,15 @@ func calc_cmd() error {
 				break
 			}
 
-			fmt.Println(colorspace.CMYK_obj{CYAN: c, MAGENTA: m, YELLOW: y, KEY: k})
+			cmyk := colorspace.CMYK_obj{CYAN: c, MAGENTA: m, YELLOW: y, KEY: k}
+
+			c_rgb := cmyk.To_rgb()
+			c_hsv := c_rgb.To_hsv()
+			c_hsl := c_rgb.To_hsl()
+			c_lab := c_rgb.To_cielab()
+			c_hex := c_rgb.To_hex()
+
+			fmt.Printf("In RGB: Red - %d / Green - %d / Blue - %d\nIn HSV: Hue - %.2f / Saturation - %.2f / Value - %.2f\nIn HSL: Hue - %.2f / Saturation - %.2f / Lightness - %.2f\nIn CIELAB: L - %.2f / a - %.2f / b - %.2f\nIn Hex: %s\n", c_rgb.RED, c_rgb.GREEN, c_rgb.BLUE, c_hsv.HUE, c_hsv.SATURATION, c_hsv.VALUE, c_hsl.HUE, c_hsl.SATURATION, c_hsl.LIGHTNESS, c_lab.L, c_lab.A, c_lab.B, c_hex)
 		case "hsv" :
 			if len(input) != 4 {
 				fmt.Println("Invalid input, expecting 3 corresponding fields for HSV: Hue, Saturation and Value")
@@ -155,7 +171,15 @@ func calc_cmd() error {
 				break
 			}
 
-			fmt.Println(colorspace.HSV_obj{HUE: h, SATURATION: s, VALUE: v})
+			hsv := colorspace.HSV_obj{HUE: h, SATURATION: s, VALUE: v}
+
+			c_rgb := hsv.To_rgb()
+			c_cmyk := c_rgb.To_cmyk()
+			c_hsl := hsv.To_hsl()
+			c_lab := c_rgb.To_cielab()
+			c_hex := c_rgb.To_hex()
+
+			fmt.Printf("In RGB: Red - %d / Green - %d / Blue - %d\nIn CMYK: Cyan - %.2f / Magenta - %.2f / Yellow - %.2f / Key - %.2f\nIn HSL: Hue - %.2f / Saturation - %.2f / Lightness - %.2f\nIn CIELAB: L - %.2f / a - %.2f / b - %.2f\nIn Hex: %s\n", c_rgb.RED, c_rgb.GREEN, c_rgb.BLUE, c_cmyk.CYAN, c_cmyk.MAGENTA, c_cmyk.YELLOW, c_cmyk.KEY, c_hsl.HUE, c_hsl.SATURATION, c_hsl.LIGHTNESS, c_lab.L, c_lab.A, c_lab.B, c_hex)
 		case "hsl" :
 			if len(input) != 4 {
 				fmt.Println("Invalid input, expecting 3 corresponding fields for HSL: Hue, Saturation and Lightness")
@@ -188,7 +212,15 @@ func calc_cmd() error {
 				break
 			}
 
-			fmt.Println(colorspace.HSL_obj{HUE: h, SATURATION: s, LIGHTNESS: l})
+			hsl := colorspace.HSL_obj{HUE: h, SATURATION: s, LIGHTNESS: l}
+
+			c_rgb := hsl.To_rgb()
+			c_cmyk := c_rgb.To_cmyk()
+			c_hsv := hsl.To_hsv()
+			c_lab := c_rgb.To_cielab()
+			c_hex := c_rgb.To_hex()
+
+			fmt.Printf("In RGB: Red - %d / Green - %d / Blue - %d\nIn CMYK: Cyan - %.2f / Magenta - %.2f / Yellow - %.2f / Key - %.2f\nIn HSV: Hue - %.2f / Saturation - %.2f / Value - %.2f\nIn CIELAB: L - %.2f / a - %.2f / b - %.2f\nIn Hex: %s\n", c_rgb.RED, c_rgb.GREEN, c_rgb.BLUE, c_cmyk.CYAN, c_cmyk.MAGENTA, c_cmyk.YELLOW, c_cmyk.KEY, c_hsv.HUE, c_hsv.SATURATION, c_hsv.VALUE, c_lab.L, c_lab.A, c_lab.B, c_hex)
 		case "cielab", "lab" :
 			if len(input) != 4 {
 				fmt.Println("Invalid input, expecting 3 corresponding fields for CIELAB: L, a and b")
@@ -213,15 +245,23 @@ func calc_cmd() error {
 			if l > 100.0 || l < 0.0 {
 				fmt.Printf("Invalid input for L: %f; Should be within [0.0, 100.0]\n", l)
 				break
-			} else if a > 100.0 || a < 0.0 {
+			} else if a > 150.0 || a < -150.0 {
 				fmt.Printf("Invalid input for a: %f; Should be within [-150.0, 150.0]\n", a)
 				break
-			} else if b > 100.0 || b < 0.0 {
+			} else if b > 150.0 || b < -150.0 {
 				fmt.Printf("Invalid input for b: %f; Should be within [-150.0, 150.0]\n", b)
 				break
 			}
 
-			fmt.Println(colorspace.CIELAB_obj{L: l, A: a, B: b})
+			lab := colorspace.CIELAB_obj{L: l, A: a, B: b}
+
+			c_rgb := lab.To_rgb()
+			c_cmyk := c_rgb.To_cmyk()
+			c_hsv := c_rgb.To_hsv()
+			c_hsl := c_rgb.To_hsl()
+			c_hex := c_rgb.To_hex()
+
+			fmt.Printf("In RGB: Red - %d / Green - %d / Blue - %d\nIn CMYK: Cyan - %.2f / Magenta - %.2f / Yellow - %.2f / Key - %.2f\nIn HSV: Hue - %.2f / Saturation - %.2f / Value - %.2f\nIn HSL: Hue - %.2f / Saturation - %.2f / Lightness - %.2f\nIn Hex: %s\n", c_rgb.RED, c_rgb.GREEN, c_rgb.BLUE, c_cmyk.CYAN, c_cmyk.MAGENTA, c_cmyk.YELLOW, c_cmyk.KEY, c_hsv.HUE, c_hsv.SATURATION, c_hsv.VALUE, c_hsl.HUE, c_hsl.SATURATION, c_hsl.LIGHTNESS, c_hex)
 		case "hex" :
 			if len(input[1]) != 7 {
 				fmt.Println("Invalid input for Hex: expecting #NNNNNN format")
@@ -249,7 +289,20 @@ func calc_cmd() error {
 			fmt.Println("Invalid input. Expecting : RGB/CMYK/HSV/HSL/CIELAB(LAB)/HEX and corresponding fields. Example: RGB 10 20 30")
 	}
 
+	fmt.Printf("Continue using the calculator? (y/n) > ")
 
+	c_scanner.Scan()
+
+	if err := c_scanner.Err(); err != nil {
+		return err
+	}
+
+	input_two := Clean_Input(c_scanner.Text())
+
+	switch input_two[0] {
+		case "y", "ye", "yes":
+			calc_cmd()
+	}
 
 	return nil
 }
