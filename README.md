@@ -30,3 +30,10 @@ go build -o cli-color-calc
 
 ./cli-color-calc
 ```
+
+## Getting usage information
+
+After running the application, type to get more information about available commands :
+```bash
+Color Calculator > help
+```
